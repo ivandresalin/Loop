@@ -202,6 +202,7 @@
 <!-- SCREEN 3: APP SHELL -->
 <!-- ============================================================ -->
 <div id="app-shell" class="screen">
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <button class="mobile-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo"><span class="logo-dot light"></span> Loop</div>
@@ -279,12 +280,14 @@
             <option value="Insumos">Insumos</option>
           </select>
         </div>
-        <table class="data-table">
-          <thead>
-            <tr><th>Producto</th><th>Categoría</th><th>Cantidad</th><th>Vence en</th><th>Estado</th><th>Costo</th></tr>
-          </thead>
-          <tbody id="inventory-tbody"></tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr><th>Producto</th><th>Categoría</th><th>Cantidad</th><th>Vence en</th><th>Estado</th><th>Costo</th></tr>
+            </thead>
+            <tbody id="inventory-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -308,10 +311,12 @@
 
       <div class="card">
         <div class="card-title">Detalle por platillo</div>
-        <table class="data-table">
-          <thead><tr><th>Platillo</th><th>Demanda proyectada</th><th>Stock cubierto</th><th>Balance</th></tr></thead>
-          <tbody id="predictions-tbody"></tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead><tr><th>Platillo</th><th>Demanda proyectada</th><th>Stock cubierto</th><th>Balance</th></tr></thead>
+            <tbody id="predictions-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -381,10 +386,12 @@
         </div>
         <div class="card">
           <div class="card-title">Detalle de residuos</div>
-          <table class="data-table">
-            <thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th><th>Razón</th><th>Detectado por</th><th>Costo</th></tr></thead>
-            <tbody id="waste-tbody"></tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead><tr><th>Fecha</th><th>Producto</th><th>Cantidad</th><th>Razón</th><th>Detectado por</th><th>Costo</th></tr></thead>
+              <tbody id="waste-tbody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>
@@ -403,10 +410,12 @@
 
       <div class="card">
         <div class="card-title">Resumen por mes</div>
-        <table class="data-table">
-          <thead><tr><th>Mes</th><th>Ahorro</th><th>Desperdicio evitado</th><th>CO2 evitado</th><th>Ingresos</th></tr></thead>
-          <tbody id="reports-tbody"></tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead><tr><th>Mes</th><th>Ahorro</th><th>Desperdicio evitado</th><th>CO2 evitado</th><th>Ingresos</th></tr></thead>
+            <tbody id="reports-tbody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -757,6 +766,29 @@ select{border:1px solid #dde7dd;border-radius:var(--radius-sm);padding:9px 14px;
 .donut-legend-item{display:flex;align-items:center;gap:8px;font-size:0.84rem;}
 .donut-swatch{width:12px;height:12px;border-radius:3px;}
 
+/* ---------- TABLE RESPONSIVE WRAPPER ---------- */
+.table-responsive{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin-top:6px;
+}
+.sidebar-overlay{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(3px);
+  z-index:54;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.25s ease;
+}
+.sidebar-overlay.open{
+  opacity:1;
+  pointer-events:auto;
+}
+
 /* ============================================================ */
 /* RESPONSIVE */
 /* ============================================================ */
@@ -768,17 +800,49 @@ select{border:1px solid #dde7dd;border-radius:var(--radius-sm);padding:9px 14px;
   .calculator{flex-direction:column;}
 }
 @media (max-width:768px){
-  .navbar{padding:16px 20px;}
+  .sidebar-overlay{display:block;}
+  .navbar{padding:14px 20px;}
   .nav-links{display:none;}
-  .section-block{padding:60px 24px;}
-  .hero h1{font-size:2.1rem;}
+  .btn-nav{padding:8px 16px;font-size:0.82rem;}
+  .section-block{padding:50px 20px;}
+  .hero{padding:40px 20px 60px;gap:36px;}
+  .hero h1{font-size:2rem;}
+  .hero-actions{flex-direction:column;width:100%;}
+  .hero-actions .btn{width:100%;text-align:center;}
   .benefit-grid,.feature-grid,.steps{grid-template-columns:1fr;}
   .kpi-grid{grid-template-columns:1fr;}
-  .mobile-toggle{display:flex;}
-  .sidebar{position:fixed;left:-260px;z-index:55;transition:left .2s ease;box-shadow:var(--shadow-lg);}
+  .mobile-toggle{display:flex;box-shadow:var(--shadow-lg);}
+  .sidebar{position:fixed;left:-270px;z-index:55;transition:left .25s cubic-bezier(0.4, 0, 0.2, 1);box-shadow:var(--shadow-lg);}
   .sidebar.open{left:0;}
-  .content{padding:70px 18px 30px;}
-  .login-card{padding:30px;}
+  .content{padding:70px 16px 30px;}
+  .content-header{flex-direction:column;align-items:flex-start;gap:12px;}
+  .content-header h1{font-size:1.45rem;}
+  .trial-widget{width:100%;min-width:0;}
+  .login-card{padding:26px 20px;max-width:100%;}
+  .card{padding:18px;border-radius:18px;}
+  .data-table th, .data-table td{padding:10px 12px;font-size:0.82rem;white-space:nowrap;}
+  .bar-chart{gap:12px;overflow-x:auto;padding-bottom:10px;}
+  .bar-group{min-width:45px;}
+  .bar-name{font-size:0.65rem;max-width:45px;}
+  .table-toolbar{flex-direction:column;}
+  .search-box, select{width:100%;}
+  .donut-wrap{justify-content:center;}
+}
+@media (max-width:480px){
+  .navbar{padding:12px 14px;}
+  .logo{font-size:1rem;}
+  .logo-dot{width:18px;height:18px;}
+  .hero h1{font-size:1.65rem;}
+  .hero-copy{font-size:0.92rem;}
+  .social-proof{flex-direction:column;align-items:flex-start;}
+  .mockup-window{border-radius:14px;}
+  .mockup-body{flex-direction:column;}
+  .mockup-sidebar{width:100%;flex-direction:row;overflow-x:auto;gap:6px;padding:10px;}
+  .mockup-nav-item{font-size:0.7rem;white-space:nowrap;}
+  .mockup-ministats{flex-wrap:wrap;gap:10px;}
+  .kpi-value{font-size:1.4rem;}
+  .donut-wrap{flex-direction:column;gap:16px;}
+  .phone-mockup{width:100%;max-width:240px;}
 }
 
 @media print{
@@ -899,9 +963,19 @@ function navigateApp(section){
   refreshIcons();
 }
 
-function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('open'); }
+function toggleSidebar(){
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  if(sb) sb.classList.toggle('open');
+  if(ov) ov.classList.toggle('open');
+}
 function closeSidebarOnMobile(){
-  if(window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  if(window.innerWidth <= 768) {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    if(sb) sb.classList.remove('open');
+    if(ov) ov.classList.remove('open');
+  }
 }
 
 function refreshIcons(){
