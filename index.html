@@ -1016,7 +1016,9 @@ const mockData = {
     {id:3, date:"10 Jul", product:"Concha Prieta", qtyKg:2, reason:"Caducidad", detectedBy:"IA Visual", cost:12.7},
     {id:4, date:"09 Jul", product:"Cilantro", qtyKg:0.8, reason:"Sobreproducción", detectedBy:"Manual", cost:1},
     {id:5, date:"08 Jul", product:"Pulpo", qtyKg:1, reason:"Error de cocina", detectedBy:"IA Visual", cost:9},
-    {id:6, date:"07 Jul", product:"Cangrejo Azul", qtyKg:2.5, reason:"Caducidad", detectedBy:"Sensor IoT", cost:31.2}
+    {id:6, date:"07 Jul", product:"Cangrejo Azul", qtyKg:2.5, reason:"Caducidad", detectedBy:"Sensor IoT", cost:31.2},
+    {id:7, date:"06 Jul", product:"Piña para decoración", qtyKg:1.2, reason:"Merma de preparación", detectedBy:"Manual", cost:2.4},
+    {id:8, date:"05 Jul", product:"Cáscara de cítricos", qtyKg:1.8, reason:"Merma de preparación", detectedBy:"IA Visual", cost:1.5}
   ],
 
   reportsMonthly:[
@@ -1312,7 +1314,7 @@ function renderWaste(){
 
   const reasons = {};
   w.forEach(i => { reasons[i.reason] = (reasons[i.reason] || 0) + i.qtyKg; });
-  const colors = {"Caducidad":"#1E5631","Error de cocina":"#deff9a","Sobreproducción":"#8fbf7a"};
+  const colors = {"Caducidad":"#1E5631","Error de cocina":"#deff9a","Sobreproducción":"#8fbf7a","Merma de preparación":"#a3d977"};
   let acc = 0;
   const total = Object.values(reasons).reduce((a,b)=>a+b,0);
   const gradientParts = Object.entries(reasons).map(([reason,kg]) => {
