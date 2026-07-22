@@ -205,7 +205,10 @@
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <button class="mobile-toggle" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-logo"><span class="logo-dot light"></span> Loop</div>
+    <div class="sidebar-logo">
+      <span class="logo-brand"><span class="logo-dot light"></span> Loop</span>
+      <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Cerrar menú"><i data-lucide="x"></i></button>
+    </div>
     <nav class="sidebar-nav">
       <a class="nav-item active" data-section="dashboard" onclick="navigateApp('dashboard')"><i data-lucide="layout-dashboard"></i> Dashboard</a>
       <a class="nav-item" data-section="inventory" onclick="navigateApp('inventory')"><i data-lucide="package-search"></i> Inventario Inteligente</a>
@@ -635,6 +638,9 @@ input,select{font-family:inherit;}
   position:sticky;top:0;height:100vh;
 }
 .sidebar-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.1rem;padding:0 8px;}
+.logo-brand{display:flex;align-items:center;gap:8px;}
+.sidebar-close{display:none;background:transparent;border:none;color:var(--white);padding:4px;cursor:pointer;align-items:center;justify-content:center;}
+.sidebar-close i{width:20px;height:20px;}
 .sidebar-nav{display:flex;flex-direction:column;gap:4px;flex:1;}
 .nav-item{
   display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:12px;
@@ -810,12 +816,22 @@ select{border:1px solid #dde7dd;border-radius:var(--radius-sm);padding:9px 14px;
     left:-270px;
     top:0;
     bottom:0;
-    z-index:65;
+    z-index:80; /* Supera a .mobile-toggle (70) para cubrirlo totalmente */
     transition:left .25s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow:var(--shadow-lg);
   }
   .sidebar.open{
     left:0;
+  }
+  .sidebar-logo{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+    padding:0;
+  }
+  .sidebar-close{
+    display:flex;
   }
   .mobile-toggle{
     display:flex;
@@ -824,6 +840,11 @@ select{border:1px solid #dde7dd;border-radius:var(--radius-sm);padding:9px 14px;
     left:14px;
     z-index:70;
     box-shadow:var(--shadow-lg);
+  }
+  /* Ocultar el botón hamburguesa cuando la barra lateral está desplegada */
+  .sidebar.open ~ .mobile-toggle,
+  #sidebar.open ~ .mobile-toggle{
+    display:none !important;
   }
 
   /* Evitar superposición del botón de hamburguesa con encabezados */
