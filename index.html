@@ -24,7 +24,10 @@
       <a href="#calculadora">Calculadora de Ahorro</a>
       <a href="#caracteristicas">Características</a>
     </div>
-    <button class="btn btn-primary btn-nav" onclick="navigateTo('login')">Prueba de 2 Semanas Gratis</button>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a onclick="navigateTo('login')" style="font-size:0.85rem;color:var(--muted);cursor:pointer;font-weight:600;">Ver Demo App</a>
+      <button class="btn btn-primary btn-nav" onclick="openLeadModal(event)">Prueba de 2 Semanas Gratis</button>
+    </div>
   </nav>
 
   <header class="hero">
@@ -35,8 +38,8 @@
       <h1>Optimiza, planea, ahorra y <span class="highlight">evita el desperdicio</span> en tu restaurante.</h1>
       <p class="hero-copy">La plataforma inteligente de gestión circular que predice tu demanda, automatiza tus compras, canaliza excedentes mediante promociones dinámicas y procesa tus residuos orgánicos.</p>
       <div class="hero-actions">
-        <button class="btn btn-primary" onclick="navigateTo('login')">Comenzar Prueba Gratuita (14 días)</button>
-        <button class="btn btn-secondary" onclick="navigateTo('login')">Solicitar Demostración en Vivo</button>
+        <button class="btn btn-primary" onclick="openLeadModal(event)">Comenzar Prueba Gratuita (14 días)</button>
+        <button class="btn btn-secondary" onclick="openLeadModal(event)">Solicitar Demostración en Vivo</button>
       </div>
       <div class="social-proof">
         <div class="avatars">
@@ -170,6 +173,35 @@
   </footer>
 </section>
 
+<!-- ============================================================ -->
+<!-- LEAD CAPTURE MODAL (BETA LISTA DE ESPERA) -->
+<!-- ============================================================ -->
+<div id="lead-modal" class="modal-overlay" onclick="closeLeadModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeLeadModal()">&times;</button>
+    <div id="modal-form-state">
+      <div class="logo"><span class="logo-dot"></span><span>Loop</span></div>
+      <h3>Únete a la lista de espera para nuestra Beta Privada</h3>
+      <p class="modal-sub">Sé de los primeros restaurantes en reducir desperdicios y optimizar costos con IA.</p>
+      <form onsubmit="handleLeadSubmit(event)">
+        <label class="form-label">Correo electrónico corporativo
+          <input type="email" id="lead-email" placeholder="ejemplo@restaurante.com" required class="modal-input">
+        </label>
+        <button type="submit" class="btn btn-primary btn-block">Solicitar Acceso a la Beta</button>
+      </form>
+      <div style="text-align:center;margin-top:16px;">
+        <a onclick="closeLeadModal(); navigateTo('login');" class="login-back" style="font-size:0.82rem;text-decoration:underline;">¿Ya tienes cuenta o deseas probar la Demo? Iniciar Sesión</a>
+      </div>
+    </div>
+    <div id="modal-success-state" style="display:none;text-align:center;">
+      <div class="success-icon"><i data-lucide="check-circle-2"></i></div>
+      <h3>¡Gracias! Te contactaremos pronto</h3>
+      <p class="modal-sub">Hemos registrado tu correo exitosamente. Te enviaremos tu invitación a la Beta Privada de Loop muy pronto.</p>
+      <button class="btn btn-primary btn-block" onclick="closeLeadModal()" style="margin-top:20px;">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ============================================================ -->
 <!-- SCREEN 2: LOGIN -->
@@ -218,6 +250,7 @@
       <a class="nav-item" data-section="reports" onclick="navigateApp('reports')"><i data-lucide="file-bar-chart"></i> Reportes</a>
     </nav>
     <div class="sidebar-footer">
+      <button class="nav-item theme-toggle-btn" onclick="toggleTheme()"><i data-lucide="palette"></i> <span id="theme-btn-text">Tema: Verde</span></button>
       <div class="sidebar-user">
         <div class="avatar-circle">MB</div>
         <div>
@@ -628,6 +661,124 @@ input,select{font-family:inherit;}
 .login-back{display:block;text-align:center;margin-top:16px;color:var(--muted);font-size:0.85rem;}
 .login-back:hover{color:var(--primary);}
 
+/* ---------- THEMES (White-label & Modo Cocina Dark) ---------- */
+body.theme-nautical {
+  --primary:#0f4c81;
+  --primary-dark:#0a2540;
+  --accent:#80e2fc;
+  --accent-dark:#48bfe3;
+  --bg:#f0f7fc;
+  --ok:#0f4c81;
+  --ok-bg:#e4f6fb;
+}
+
+body.theme-dark {
+  --bg:#121212;
+  --white:#1e1e1e;
+  --text:#e0e0e0;
+  --muted:#9e9e9e;
+  --shadow:0 8px 30px rgba(0,0,0,0.35);
+  --primary:#4caf50;
+  --primary-dark:#1b5e20;
+  --accent:#a7ffeb;
+  --accent-dark:#64ffda;
+  --ok:#81c784;
+  --ok-bg:#1c3320;
+  --danger-bg:#3a1c1c;
+  --warn-bg:#3a301c;
+}
+body.theme-dark .navbar {
+  background:rgba(30,30,30,0.94);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+body.theme-dark .hero h1 {
+  color:#ffffff;
+}
+body.theme-dark .data-table td {
+  border-bottom-color:#2a2a2a;
+}
+body.theme-dark select, body.theme-dark input {
+  background:#262626;
+  color:#e0e0e0;
+  border-color:#3a3a3a;
+}
+
+.theme-toggle-btn {
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  color:#b9c9ba;
+  width:100%;
+  cursor:pointer;
+}
+.theme-toggle-btn:hover {
+  background:rgba(255,255,255,0.12);
+  color:var(--white);
+}
+
+/* ---------- LEAD CAPTURE MODAL ---------- */
+.modal-overlay {
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(4px);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open {
+  display:flex;
+}
+.modal-card {
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  width:100%;
+  max-width:440px;
+  padding:32px 28px;
+  position:relative;
+  animation:modalFadeIn 0.25s ease;
+}
+@keyframes modalFadeIn {
+  from { opacity:0; transform:translateY(12px) scale(0.96); }
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+.modal-close {
+  position:absolute;
+  top:16px;right:18px;
+  background:transparent;
+  border:none;
+  font-size:1.6rem;
+  color:var(--muted);
+  cursor:pointer;
+  line-height:1;
+}
+.modal-close:hover { color:var(--text); }
+.modal-card h3 { font-size:1.25rem; margin:14px 0 6px; line-height:1.3; }
+.modal-sub { color:var(--muted); font-size:0.88rem; margin-bottom:18px; }
+.modal-input {
+  width:100%;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  border:1px solid #dde7dd;
+  font-size:0.92rem;
+  margin-top:4px;
+}
+.modal-input:focus {
+  outline:2px solid var(--accent-dark);
+  border-color:var(--primary);
+}
+.success-icon {
+  width:56px; height:56px;
+  border-radius:50%;
+  background:var(--ok-bg);
+  color:var(--primary);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 12px;
+}
+.success-icon i { width:32px; height:32px; }
+
 /* ============================================================ */
 /* APP SHELL */
 /* ============================================================ */
@@ -767,7 +918,19 @@ select{border:1px solid #dde7dd;border-radius:var(--radius-sm);padding:9px 14px;
 
 /* ---------- DONUT ---------- */
 .donut-wrap{display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
-.donut{width:170px;height:170px;border-radius:50%;flex-shrink:0;}
+.donut{
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  flex-shrink:0;
+  position:relative;
+  -webkit-mask-image:radial-gradient(circle, transparent 55%, #000 56%);
+  mask-image:radial-gradient(circle, transparent 55%, #000 56%);
+  transition:transform 0.25s ease;
+}
+.donut:hover{
+  transform:scale(1.03);
+}
 .donut-legend{display:flex;flex-direction:column;gap:10px;}
 .donut-legend-item{display:flex;align-items:center;gap:8px;font-size:0.84rem;}
 .donut-swatch{width:12px;height:12px;border-radius:3px;}
@@ -1085,6 +1248,48 @@ function refreshIcons(){
 }
 
 /* ============================================================ */
+/* THEME SWITCHER (3 Estados: Verde -> Azul -> Oscuro)          */
+/* ============================================================ */
+let currentThemeIndex = 0; // 0: Verde, 1: Azul, 2: Oscuro
+const themeClasses = ['', 'theme-nautical', 'theme-dark'];
+const themeNames = ['Tema: Verde', 'Tema: Azul', 'Tema: Oscuro'];
+
+function toggleTheme(){
+  currentThemeIndex = (currentThemeIndex + 1) % 3;
+  document.body.classList.remove('theme-nautical', 'theme-dark');
+  if(themeClasses[currentThemeIndex]) {
+    document.body.classList.add(themeClasses[currentThemeIndex]);
+  }
+  const btnText = document.getElementById('theme-btn-text');
+  if(btnText) btnText.textContent = themeNames[currentThemeIndex];
+  refreshIcons();
+}
+
+/* ============================================================ */
+/* LEAD CAPTURE MODAL */
+/* ============================================================ */
+function openLeadModal(e){
+  if(e) e.preventDefault();
+  document.getElementById('modal-form-state').style.display = 'block';
+  document.getElementById('modal-success-state').style.display = 'none';
+  document.getElementById('lead-modal').classList.add('open');
+  refreshIcons();
+}
+
+function closeLeadModal(e){
+  if(!e || e.target.classList.contains('modal-overlay') || e.target.classList.contains('modal-close') || e.target.tagName === 'BUTTON'){
+    document.getElementById('lead-modal').classList.remove('open');
+  }
+}
+
+function handleLeadSubmit(e){
+  e.preventDefault();
+  document.getElementById('modal-form-state').style.display = 'none';
+  document.getElementById('modal-success-state').style.display = 'block';
+  refreshIcons();
+}
+
+/* ============================================================ */
 /* CALCULATOR (landing) */
 /* ============================================================ */
 function updateCalculator(){
@@ -1314,14 +1519,19 @@ function renderWaste(){
 
   const reasons = {};
   w.forEach(i => { reasons[i.reason] = (reasons[i.reason] || 0) + i.qtyKg; });
-  const colors = {"Caducidad":"#1E5631","Error de cocina":"#deff9a","Sobreproducción":"#8fbf7a","Merma de preparación":"#a3d977"};
+  const colors = {
+    "Caducidad": "#ef4444",
+    "Error de cocina": "#f97316",
+    "Sobreproducción": "#eab308",
+    "Merma de preparación": "#3b82f6"
+  };
   let acc = 0;
   const total = Object.values(reasons).reduce((a,b)=>a+b,0);
   const gradientParts = Object.entries(reasons).map(([reason,kg]) => {
     const pct = (kg/total)*100;
     const start = acc;
     acc += pct;
-    return `${colors[reason] || '#ccc'} ${start}% ${acc}%`;
+    return `${colors[reason] || '#ccc'} ${start}% ${acc - 0.4}%, var(--white) ${acc - 0.4}% ${acc}%`;
   });
   document.getElementById('donut-chart').style.background = `conic-gradient(${gradientParts.join(',')})`;
 
